@@ -35,7 +35,7 @@ sectests:
 splunktest:
     stage: splunktest
     script:
-    - wget --output-document splunk-appinspect.tar.gz https://download.splunk.com/misc/appinspect/splunk-appinspect-2.0.0.tar.gz
+    - wget --output-document splunk-appinspect.tar.gz https://download.splunk.com/misc/appinspect/splunk-appinspect-latest.tar.gz
     - pip install splunk-appinspect.tar.gz 
     - mkdir /tmp/${CI_PROJECT_NAME}
     - git archive --format tar HEAD | tar -xC /tmp/${CI_PROJECT_NAME}
