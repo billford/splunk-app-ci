@@ -6,6 +6,8 @@ Alright, we build A LOT of Splunk apps and they get punted back for a variety of
 
 The core of this automation is GitLab's built-in continuous integration module (CI/CD) and it's very straight forward. First you create a configuration file (.gitlab-ci.yml) and you configured it, once it's configured A LOT of magic happens in the background and you get a pass/fail on your code. Sounds nifty right? Cool, let's look at our configuration file. 
 
+I've also added a python3 implementation of this testing configuration to go along with Splunk's py3 cutover. 
+
 ```
 image: python:2.7
 stages:
