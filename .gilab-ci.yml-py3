@@ -1,0 +1,40 @@
+image: python
+stages:
+    - lint
+    - sectest
+    - splunktest
+   
+delint:
+    stage: lint
+    script:
+    - pip3 install pylint
+    - pip3 install requests
+    - pylint ${CI_PROJECT_DIR}/bin/*.py
+  
+    tags: 
+        - docker
+
+sectests:
+    stage: sectest
+    script:
+    - pip3 install bandit
+    - bandit -r ${CI_PROJECT_DIR}/bin/*.py
+
+    tags: 
+        - docker
+        
+
+splunktest:
+    stage: splunktest
+    image: python:2.7
+    script:
+    - wget --output-document splunk-appinspect.tar.gz https://download.splunk.com/misc/appinspect/splunk-appinspect-latest.tar.gz
+    - pip install splunk-appinspect.tar.gz 
+    - mkdir /tmp/${CI_PROJECT_NAME}
+    - git archive --format tar HEAD | tar -xC /tmp/${CI_PROJECT_NAME}
+    - splunk-appinspect inspect /tmp/${CI_PROJECT_NAME} --mode precert --included-tags cloud
+    - splunk-appinspect inspect /tmp/${CI_PROJECT_NAME} --mode precert --included-tags cloud |grep "error:\\s 0\|failure:\s 0"
+    - echo "Pay attention to the values above ^^ both will cause your app to be rejected if they're > 0"
+    
+    tags: 
+        - docker
